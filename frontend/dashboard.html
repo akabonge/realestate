@@ -230,16 +230,65 @@
     .budget-sub { font-size: 0.72rem; color: var(--gray); }
 
     .detail-btn {
-      background: none;
-      border: 1px solid var(--border);
+      background: var(--navy);
+      border: none;
       border-radius: 4px;
-      padding: 0.3rem 0.6rem;
+      padding: 0.35rem 0.75rem;
       font-size: 0.75rem;
       cursor: pointer;
-      color: var(--navy);
-      transition: all 0.15s;
+      color: var(--white);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: background 0.15s;
+      white-space: nowrap;
     }
-    .detail-btn:hover { background: var(--navy); color: var(--white); border-color: var(--navy); }
+    .detail-btn:hover { background: var(--gold); }
+    .detail-btn .chevron { transition: transform 0.2s; display: inline-block; }
+    .detail-btn.open .chevron { transform: rotate(180deg); }
+
+    /* EXPANDABLE DETAIL ROW */
+    .detail-row td {
+      padding: 0;
+      background: var(--gray-light);
+      border-bottom: 1px solid var(--border);
+    }
+    .detail-panel {
+      padding: 1.25rem 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1.25rem;
+    }
+    .detail-section-title {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gray);
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+    .detail-reasoning {
+      background: var(--white);
+      border-left: 3px solid var(--gold);
+      padding: 0.65rem 0.85rem;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.82rem;
+      color: var(--navy);
+      line-height: 1.55;
+    }
+    .detail-summary {
+      background: var(--white);
+      border-left: 3px solid var(--navy);
+      padding: 0.65rem 0.85rem;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.82rem;
+      color: var(--navy);
+      font-style: italic;
+      line-height: 1.5;
+    }
+    .detail-fields { display: flex; flex-direction: column; gap: 0.4rem; }
+    .detail-field label { font-size: 0.68rem; color: var(--gray); display: block; }
+    .detail-field span { font-size: 0.84rem; color: var(--navy); font-weight: 500; }
 
     /* MODAL */
     .modal-overlay {
@@ -499,19 +548,28 @@
       const nbhds = lead.neighborhoods?.length ? lead.neighborhoods.slice(0, 2).join(', ') : '—';
       const date = lead.captured_at ? new Date(lead.captured_at).toLocaleDateString() : '—';
 
-      const reasoningSnippet = lead.score_reasoning
-        ? lead.score_reasoning.slice(0, 90) + (lead.score_reasoning.length > 90 ? '…' : '')
-        : '';
+      const rowId = `row-${lead.session_id.replace(/[^a-z0-9]/gi, '')}`;
+      const panelId = `panel-${lead.session_id.replace(/[^a-z0-9]/gi, '')}`;
+      const safeJson = JSON.stringify(JSON.stringify(lead)).replace(/'/g, "&#39;");
 
-      return `<tr>
-        <td>
-          <span class="score-badge ${scoreClass}">${lead.score || '?'}</span>
-          ${reasoningSnippet ? `<div style="font-size:0.68rem;color:var(--gray);margin-top:0.35rem;max-width:80px;line-height:1.3;">${reasoningSnippet}</div>` : ''}
-        </td>
+      // Build detail panel fields
+      const detailFields = [
+        ['Name', lead.name],
+        ['Email', lead.email],
+        ['Phone', lead.phone],
+        ['Home Type', lead.home_type],
+        ['Timeline', lead.timeline],
+        ['Motivation', lead.motivation],
+        ['Pre-Approved', lead.is_pre_approved === true ? 'Yes' : lead.is_pre_approved === false ? 'No' : null],
+        ['Military', lead.is_military === true ? 'Yes' : null],
+        ['Investor', lead.is_investor === true ? 'Yes' : null],
+      ].filter(([, v]) => v);
+
+      return `<tr id="${rowId}">
+        <td><span class="score-badge ${scoreClass}">${lead.score || '?'}</span></td>
         <td>
           <div class="lead-name">${lead.name || 'Unknown'}</div>
           <div class="lead-email">${lead.email || lead.phone || 'No contact yet'}</div>
-          ${lead.conversation_summary ? `<div style="font-size:0.75rem;color:var(--navy);margin-top:0.3rem;font-style:italic;max-width:220px;line-height:1.35;">${lead.conversation_summary}</div>` : ''}
         </td>
         <td>
           <div class="budget-range">${budget}</div>
@@ -521,7 +579,35 @@
         <td><div class="timeline-chip">${lead.timeline || '—'}</div></td>
         <td>${tags || '<span style="color:var(--gray);font-size:0.8rem;">—</span>'}</td>
         <td style="color:var(--gray);font-size:0.78rem;">${date}</td>
-        <td><button class="detail-btn" onclick="openModal(${JSON.stringify(JSON.stringify(lead)).replace(/'/g, "&#39;")})">Details</button></td>
+        <td>
+          <button class="detail-btn" id="btn-${panelId}" onclick="togglePanel('${panelId}', this)">
+            Details <span class="chevron">&#8964;</span>
+          </button>
+        </td>
+      </tr>
+      <tr class="detail-row" id="${panelId}" style="display:none;">
+        <td colspan="8">
+          <div class="detail-panel">
+            <div>
+              <div class="detail-section-title">Scout Summary</div>
+              <div class="detail-summary">${lead.conversation_summary || 'No summary yet — continue the conversation.'}</div>
+            </div>
+            <div>
+              <div class="detail-section-title">Score Reasoning</div>
+              <div class="detail-reasoning">${lead.score_reasoning || 'Score reasoning not yet generated.'}</div>
+            </div>
+            <div>
+              <div class="detail-section-title">Lead Profile</div>
+              <div class="detail-fields">
+                ${detailFields.map(([label, val]) => `
+                  <div class="detail-field"><label>${label}</label><span>${val}</span></div>
+                `).join('') || '<div style="color:var(--gray);font-size:0.82rem;">No profile data yet</div>'}
+                <div class="detail-field" style="margin-top:0.25rem;"><label>All Neighborhoods</label><span>${lead.neighborhoods?.join(', ') || '—'}</span></div>
+                <div class="detail-field"><label>Session ID</label><span style="font-size:0.7rem;word-break:break-all;">${lead.session_id}</span></div>
+              </div>
+            </div>
+          </div>
+        </td>
       </tr>`;
     }).join('');
 
@@ -541,6 +627,13 @@
         </thead>
         <tbody>${rows}</tbody>
       </table>`;
+  }
+
+  function togglePanel(panelId, btn) {
+    const panel = document.getElementById(panelId);
+    const isOpen = panel.style.display !== 'none';
+    panel.style.display = isOpen ? 'none' : 'table-row';
+    btn.classList.toggle('open', !isOpen);
   }
 
   function fmtBudget(n) {
