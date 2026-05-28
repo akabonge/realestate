@@ -77,7 +77,7 @@ def build_documents() -> list[tuple[str, str, str]]:
             f"Price range: {n['price_range']}\nMedian price: ${n['median_home_price']:,}\n"
             f"Description: {n['description']}\n"
             f"Best for: {n['best_for']}\n"
-            f"Schools: {n['schools']}\n"
+            f"Schools: {n.get('schools', 'Varies by location')}\n"
             f"{hoa_info}\n"
             f"Highlights:\n{highlights}"
         )
