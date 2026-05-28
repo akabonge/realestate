@@ -648,14 +648,14 @@
 
   // ── Data rendering ──────────────────────────────────────────────
   const listings = [
-    { id:'RRG-001', price:'$524,900', address:'4712 River Bend Ct, Fredericksburg', neighborhood:'Celebrate Virginia', bed:4, bath:3.5, sqft:'2,850', badge:'New' },
-    { id:'RRG-002', price:'$589,000', address:'210 Patriot Ln, Stafford', neighborhood:'Embrey Mill', bed:5, bath:4, sqft:'3,200', badge:'Hot' },
-    { id:'RRG-003', price:'$695,000', address:'88 Harbour View Dr, Stafford', neighborhood:'Aquia Harbour', bed:4, bath:3, sqft:'3,400', badge:'Waterfront' },
-    { id:'RRG-004', price:'$1,150,000', address:'3301 Chancellor Oak Dr, Fredericksburg', neighborhood:'Fawn Lake', bed:5, bath:5.5, sqft:'5,100', badge:'Luxury' },
-    { id:'RRG-005', price:'$389,000', address:'712 Stafford Lakes Pkwy #14, Stafford', neighborhood:'Stafford Lakes', bed:3, bath:2.5, sqft:'1,880', badge:'Great Value' },
-    { id:'RRG-006', price:'$459,000', address:'190 Leeland Rd, Stafford', neighborhood:'Leeland Station', bed:4, bath:3, sqft:'2,340', badge:'VRE Access' },
-    { id:'RRG-007', price:'$875,000', address:'5840 Lake Shore Dr, Bumpass', neighborhood:'Lake Anna', bed:5, bath:4, sqft:'3,100', badge:'Airbnb Income' },
-    { id:'RRG-008', price:'$349,000', address:'1403 Caroline St, Fredericksburg', neighborhood:'Downtown', bed:3, bath:2, sqft:'1,650', badge:'Historic' },
+    { id:'RRG-001', price:'$524,900', address:'4712 River Bend Ct, Fredericksburg', neighborhood:'Celebrate Virginia', bed:4, bath:3.5, sqft:'2,850', badge:'New',        g:['#2d6a4f','#40916c'], icon:'🌳' },
+    { id:'RRG-002', price:'$589,000', address:'210 Patriot Ln, Stafford',            neighborhood:'Embrey Mill',       bed:5, bath:4,   sqft:'3,200', badge:'Hot',        g:['#1a2744','#2d4a6b'], icon:'🏘' },
+    { id:'RRG-003', price:'$695,000', address:'88 Harbour View Dr, Stafford',        neighborhood:'Aquia Harbour',     bed:4, bath:3,   sqft:'3,400', badge:'Waterfront', g:['#1d4e89','#2176ae'], icon:'⛵' },
+    { id:'RRG-004', price:'$1,150,000',address:'3301 Chancellor Oak Dr, Fredericksburg',neighborhood:'Fawn Lake',      bed:5, bath:5.5, sqft:'5,100', badge:'Luxury',     g:['#4a1942','#7b2d8b'], icon:'⛳' },
+    { id:'RRG-005', price:'$389,000', address:'712 Stafford Lakes Pkwy #14, Stafford',neighborhood:'Stafford Lakes',  bed:3, bath:2.5, sqft:'1,880', badge:'Best Value',  g:['#7d4e00','#a96500'], icon:'🏠' },
+    { id:'RRG-006', price:'$459,000', address:'190 Leeland Rd, Stafford',            neighborhood:'Leeland Station',  bed:4, bath:3,   sqft:'2,340', badge:'VRE Access',  g:['#1b4332','#2d6a4f'], icon:'🚆' },
+    { id:'RRG-007', price:'$875,000', address:'5840 Lake Shore Dr, Bumpass',         neighborhood:'Lake Anna',        bed:5, bath:4,   sqft:'3,100', badge:'Airbnb $$',   g:['#023e8a','#0077b6'], icon:'🌊' },
+    { id:'RRG-008', price:'$349,000', address:'1403 Caroline St, Fredericksburg',    neighborhood:'Downtown',         bed:3, bath:2,   sqft:'1,650', badge:'Historic',     g:['#6b2737','#9b2335'], icon:'🏛' },
   ];
 
   const neighborhoods = [
@@ -671,13 +671,19 @@
 
   document.getElementById('listings-grid').innerHTML = listings.map(l => `
     <div class="listing-card">
-      <div class="listing-img">
+      <div class="listing-img" style="background:linear-gradient(145deg,${l.g[0]},${l.g[1]});position:relative;overflow:hidden;">
         <span class="listing-badge">${l.badge}</span>
-        <span class="listing-house-icon">&#127968;</span>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:0.75rem 1rem;">
+          <div style="font-size:2.8rem;opacity:0.18;text-align:right;line-height:1;">${l.icon}</div>
+          <div>
+            <div style="color:rgba(255,255,255,0.6);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;font-family:Arial,sans-serif;">Active Listing</div>
+            <div style="color:#fff;font-size:1.4rem;font-weight:bold;line-height:1.1;">${l.price}</div>
+            <div style="color:rgba(255,255,255,0.75);font-size:0.72rem;font-family:Arial,sans-serif;margin-top:0.15rem;">${l.bed} bd &nbsp;·&nbsp; ${l.bath} ba &nbsp;·&nbsp; ${l.sqft} sqft</div>
+          </div>
+        </div>
       </div>
       <div class="listing-body">
         <div class="listing-neighborhood">${l.neighborhood}</div>
-        <div class="listing-price">${l.price}</div>
         <div class="listing-address">${l.address}</div>
         <div class="listing-specs">
           <div class="listing-spec"><strong>${l.bed}</strong> Beds</div>
