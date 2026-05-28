@@ -642,6 +642,9 @@
   const API_BASE = window.location.origin + '/api';
   const SESSION_ID = 'user_' + Math.random().toString(36).slice(2, 9);
   let chatOpen = false;
+  let userMessageCount = 0;
+  let contactCardShown = false;
+  let contactSaved = false;
 
   // ── Data rendering ──────────────────────────────────────────────
   const listings = [
@@ -717,6 +720,7 @@
 
     appendMsg(text, 'user');
     input.value = '';
+    userMessageCount++;
     const typing = showTyping();
 
     try {
@@ -728,10 +732,75 @@
       const data = await res.json();
       removeTyping(typing);
       appendMsg(data.response, 'assistant', data.sources);
+
+      // Show contact card after 3rd user message, once, only if not already saved
+      if (userMessageCount === 3 && !contactCardShown && !contactSaved) {
+        contactCardShown = true;
+        setTimeout(() => showContactCard(), 600);
+      }
     } catch (e) {
       removeTyping(typing);
       appendMsg("I'm having trouble connecting right now. Try calling us at (540) 234-7800.", 'assistant');
     }
+  }
+
+  function showContactCard() {
+    const container = document.getElementById('chat-messages');
+    const card = document.createElement('div');
+    card.id = 'contact-card';
+    card.style.cssText = `
+      background: linear-gradient(135deg, #1a2744, #243258);
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+      margin: 0.25rem 0;
+      align-self: stretch;
+    `;
+    card.innerHTML = `
+      <div style="color:#e0b55a;font-size:0.72rem;font-weight:bold;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem;">Want an agent to follow up?</div>
+      <div style="color:rgba(255,255,255,0.75);font-size:0.8rem;margin-bottom:0.75rem;line-height:1.4;">Leave your name and email and someone from our team will reach out — no pressure, no spam.</div>
+      <input id="cc-name"  type="text"  placeholder="Your name"  style="${ccInputStyle()}" />
+      <input id="cc-email" type="email" placeholder="Email address" style="${ccInputStyle('0.4rem 0 0')}" />
+      <input id="cc-phone" type="tel"   placeholder="Phone (optional)" style="${ccInputStyle('0.4rem 0 0')}" />
+      <div style="display:flex;gap:0.5rem;margin-top:0.65rem;">
+        <button onclick="submitContact()" style="flex:1;background:#c9983a;color:#1a2744;border:none;border-radius:6px;padding:0.5rem;font-size:0.82rem;font-weight:bold;cursor:pointer;">Connect Me with an Agent</button>
+        <button onclick="dismissContactCard()" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);border:none;border-radius:6px;padding:0.5rem 0.7rem;font-size:0.8rem;cursor:pointer;">Not now</button>
+      </div>
+    `;
+    container.appendChild(card);
+    container.scrollTop = container.scrollHeight;
+  }
+
+  function ccInputStyle(marginTop = '0') {
+    return `width:100%;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:0.45rem 0.65rem;color:#fff;font-size:0.82rem;outline:none;box-sizing:border-box;margin-top:${marginTop};`;
+  }
+
+  async function submitContact() {
+    const name  = document.getElementById('cc-name')?.value.trim();
+    const email = document.getElementById('cc-email')?.value.trim();
+    const phone = document.getElementById('cc-phone')?.value.trim();
+    if (!name && !email) {
+      document.getElementById('cc-name').style.borderColor = '#ef4444';
+      return;
+    }
+    try {
+      await fetch(`${API_BASE}/leads/contact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ session_id: SESSION_ID, name, email, phone }),
+      });
+      contactSaved = true;
+      const card = document.getElementById('contact-card');
+      if (card) {
+        card.innerHTML = `<div style="color:#4ade80;font-size:0.85rem;text-align:center;padding:0.25rem 0;">Got it${name ? ', ' + name.split(' ')[0] : ''}. One of our agents will be in touch soon.</div>`;
+        setTimeout(() => card.remove(), 3500);
+      }
+    } catch (e) {
+      appendMsg("Something went wrong saving your info. You can also reach us at (540) 234-7800.", 'assistant');
+    }
+  }
+
+  function dismissContactCard() {
+    document.getElementById('contact-card')?.remove();
   }
 
   function appendMsg(text, role, sources) {

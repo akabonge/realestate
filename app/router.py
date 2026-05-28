@@ -1,10 +1,19 @@
 from fastapi import APIRouter, BackgroundTasks, HTTPException
+from pydantic import BaseModel
+from typing import Optional
 from app.models import ChatRequest, ChatResponse, LeadListResponse
 from app.rag.pipeline import generate_response
 from app.rag.lead_extractor import extract_and_score
-from app.lead_store import get_all_leads
+from app.lead_store import get_all_leads, get_lead, new_lead, upsert_lead
 from app.config import get_settings
 from app.rag.embedder import get_collection
+
+
+class ContactUpdate(BaseModel):
+    session_id: str
+    name: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
 
 router = APIRouter()
 
@@ -62,6 +71,16 @@ async def health():
 async def list_leads():
     leads = get_all_leads()
     return LeadListResponse(total=len(leads), leads=leads)
+
+
+@router.post("/leads/contact")
+async def save_contact(data: ContactUpdate):
+    lead = get_lead(data.session_id) or new_lead(data.session_id)
+    if data.name:  lead.name  = data.name.strip()
+    if data.email: lead.email = data.email.strip()
+    if data.phone: lead.phone = data.phone.strip()
+    upsert_lead(lead)
+    return {"ok": True, "session_id": data.session_id}
 
 
 @router.delete("/session/{session_id}")
