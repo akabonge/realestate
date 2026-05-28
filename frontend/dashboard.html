@@ -586,6 +586,7 @@
   const API_BASE = window.location.origin + '/api';
   let allLeads = [];
   let currentFilter = 'all';
+  const leadMap = {};
 
   async function loadLeads() {
     try {
@@ -663,7 +664,8 @@
 
       const rowId = `row-${lead.session_id.replace(/[^a-z0-9]/gi, '')}`;
       const panelId = `panel-${lead.session_id.replace(/[^a-z0-9]/gi, '')}`;
-      const safeJson = JSON.stringify(JSON.stringify(lead)).replace(/'/g, "&#39;");
+      const safeId = lead.session_id.replace(/'/g, "\\'");
+      leadMap[lead.session_id] = lead;
 
       // Build detail panel fields
       const detailFields = [
@@ -705,7 +707,7 @@
               <div class="detail-section-title">Scout Summary</div>
               <div class="detail-summary">${lead.conversation_summary || 'No summary yet — continue the conversation.'}</div>
               <div style="margin-top:1rem;">
-                <button class="followup-btn" onclick="followUp(${safeJson})">Draft Follow-Up Email</button>
+                <button class="followup-btn" onclick="followUp('${safeId}')">Draft Follow-Up Email</button>
               </div>
             </div>
             <div>
@@ -828,8 +830,9 @@
   }
 
   // ── Follow-Up Email ──────────────────────────────────────────────
-  function followUp(jsonStr) {
-    const lead = JSON.parse(jsonStr);
+  function followUp(sessionId) {
+    const lead = leadMap[sessionId];
+    if (!lead) return;
     const name = lead.name || 'there';
     const firstName = name.split(' ')[0];
     const budget = lead.budget_max ? `$${fmtBudget(lead.budget_max)}` : (lead.budget_min ? `around $${fmtBudget(lead.budget_min)}` : '');
