@@ -290,6 +290,91 @@
     .detail-field label { font-size: 0.68rem; color: var(--gray); display: block; }
     .detail-field span { font-size: 0.84rem; color: var(--navy); font-weight: 500; }
 
+    .followup-btn {
+      background: var(--gold);
+      color: var(--navy);
+      border: none;
+      border-radius: 5px;
+      padding: 0.45rem 1rem;
+      font-size: 0.8rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .followup-btn:hover { background: var(--gold-light); }
+
+    /* EMAIL DRAFT OVERLAY */
+    .email-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 60;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .email-overlay.open { opacity: 1; pointer-events: all; }
+    .email-modal {
+      background: var(--white);
+      border-radius: 10px;
+      width: 100%;
+      max-width: 600px;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      transform: translateY(10px);
+      transition: transform 0.2s;
+    }
+    .email-overlay.open .email-modal { transform: translateY(0); }
+    .email-modal-header {
+      padding: 1.1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .email-modal-header strong { font-size: 0.95rem; color: var(--navy); }
+    .email-modal-close {
+      background: none; border: none; font-size: 1.3rem;
+      cursor: pointer; color: var(--gray); line-height: 1;
+    }
+    .email-modal-close:hover { color: var(--navy); }
+    .email-modal-body { padding: 1.25rem 1.5rem; }
+    .email-field { margin-bottom: 1rem; }
+    .email-field label {
+      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--gray); display: block; margin-bottom: 0.35rem; font-weight: bold;
+    }
+    .email-field input, .email-field textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.55rem 0.75rem;
+      font-size: 0.875rem;
+      font-family: 'Arial', sans-serif;
+      color: var(--navy);
+      background: var(--white);
+      outline: none;
+      transition: border-color 0.15s;
+      resize: vertical;
+    }
+    .email-field input:focus, .email-field textarea:focus { border-color: var(--navy); }
+    .email-actions { display: flex; gap: 0.75rem; justify-content: flex-end; padding-top: 0.5rem; }
+    .email-copy-btn {
+      background: var(--navy); color: var(--white); border: none; border-radius: 5px;
+      padding: 0.5rem 1.1rem; font-size: 0.82rem; cursor: pointer; transition: background 0.15s;
+    }
+    .email-copy-btn:hover { background: var(--navy-light); }
+    .email-open-btn {
+      background: var(--gold); color: var(--navy); border: none; border-radius: 5px;
+      padding: 0.5rem 1.1rem; font-size: 0.82rem; font-weight: bold; cursor: pointer; transition: background 0.15s;
+    }
+    .email-open-btn:hover { background: var(--gold-light); }
+
     /* MODAL */
     .modal-overlay {
       position: fixed;
@@ -458,6 +543,34 @@
   </div>
 </div>
 
+<!-- EMAIL DRAFT OVERLAY -->
+<div class="email-overlay" id="email-overlay" onclick="closeEmailOverlay(event)">
+  <div class="email-modal">
+    <div class="email-modal-header">
+      <strong>Draft Follow-Up Email</strong>
+      <button class="email-modal-close" onclick="closeEmailDirect()">&times;</button>
+    </div>
+    <div class="email-modal-body">
+      <div class="email-field">
+        <label>To</label>
+        <input type="text" id="email-to" placeholder="Lead's email address" />
+      </div>
+      <div class="email-field">
+        <label>Subject</label>
+        <input type="text" id="email-subject" />
+      </div>
+      <div class="email-field">
+        <label>Body</label>
+        <textarea id="email-body" rows="14"></textarea>
+      </div>
+      <div class="email-actions">
+        <button class="email-copy-btn" onclick="copyEmail()">Copy to Clipboard</button>
+        <button class="email-open-btn" onclick="openInMailClient()">Open in Mail Client</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
   <div class="modal" id="modal-content">
@@ -591,6 +704,9 @@
             <div>
               <div class="detail-section-title">Scout Summary</div>
               <div class="detail-summary">${lead.conversation_summary || 'No summary yet — continue the conversation.'}</div>
+              <div style="margin-top:1rem;">
+                <button class="followup-btn" onclick="followUp(${safeJson})">Draft Follow-Up Email</button>
+              </div>
             </div>
             <div>
               <div class="detail-section-title">Score Reasoning</div>
@@ -709,6 +825,63 @@
   }
   function closeModalDirect() {
     document.getElementById('modal-overlay').classList.remove('open');
+  }
+
+  // ── Follow-Up Email ──────────────────────────────────────────────
+  function followUp(lead) {
+    const name = lead.name || 'there';
+    const firstName = name.split(' ')[0];
+    const budget = lead.budget_max ? `$${fmtBudget(lead.budget_max)}` : (lead.budget_min ? `around $${fmtBudget(lead.budget_min)}` : '');
+    const beds = lead.bedrooms ? `${lead.bedrooms}-bedroom ` : '';
+    const nbhds = lead.neighborhoods?.length ? lead.neighborhoods.slice(0, 2).join(' or ') : 'the Fredericksburg area';
+    const timeline = lead.timeline ? ` You mentioned ${lead.timeline.toLowerCase()}, so I wanted to reach out before the right home slips by.` : '';
+    const militaryLine = lead.is_military ? '\n\nAlso — if you\'re eligible for a VA loan, that could mean zero down payment. Ray Solis, our relocation specialist, handles military moves regularly and can walk you through it.' : '';
+    const investorLine = lead.is_investor ? '\n\nFor investment properties, we track Lake Anna and Stafford rental yields closely — I can pull specific numbers if that helps.' : '';
+
+    const subject = `Following up — ${beds}homes ${budget ? `up to ${budget}` : ''} in ${nbhds}`;
+
+    const body = `Hi ${firstName},
+
+Thanks for chatting with Scout on our website. I wanted to personally follow up based on your search.${timeline}
+
+It sounds like you're looking for a ${beds}home${budget ? ` in the ${budget} range` : ''} in ${nbhds}. We have a few listings right now that I think are worth a closer look, and I'd love to set up a time to talk through what matters most to you.${militaryLine}${investorLine}
+
+Would you be open to a quick 15-minute call this week? No pressure — just want to make sure you have the right information before making any decisions.
+
+Looking forward to connecting,
+
+[Your Name]
+Rappahannock Realty Group
+(540) 234-7800
+hello@rappahannockrg.com`;
+
+    document.getElementById('email-to').value = lead.email || '';
+    document.getElementById('email-subject').value = subject;
+    document.getElementById('email-body').value = body;
+    document.getElementById('email-overlay').classList.add('open');
+  }
+
+  function closeEmailOverlay(e) {
+    if (e.target === document.getElementById('email-overlay')) closeEmailDirect();
+  }
+  function closeEmailDirect() {
+    document.getElementById('email-overlay').classList.remove('open');
+  }
+  function copyEmail() {
+    const subject = document.getElementById('email-subject').value;
+    const body = document.getElementById('email-body').value;
+    const full = `Subject: ${subject}\n\n${body}`;
+    navigator.clipboard.writeText(full).then(() => {
+      const btn = document.querySelector('.email-copy-btn');
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy to Clipboard', 2000);
+    });
+  }
+  function openInMailClient() {
+    const to = encodeURIComponent(document.getElementById('email-to').value);
+    const subject = encodeURIComponent(document.getElementById('email-subject').value);
+    const body = encodeURIComponent(document.getElementById('email-body').value);
+    window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
   }
 
   // Initial load + auto-refresh every 30 seconds
