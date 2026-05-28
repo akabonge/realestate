@@ -1,5 +1,13 @@
 # Rappahannock Realty Group — Scout AI Lead Qualifier
 
+[![Live Demo](https://img.shields.io/badge/Live_Demo-railway-8B5CF6?style=for-the-badge&logo=railway&logoColor=white)](https://realestate-production-bbce.up.railway.app)
+[![GitHub](https://img.shields.io/badge/GitHub-akabonge-181717?style=for-the-badge&logo=github)](https://github.com/akabonge/realestate)
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![Claude](https://img.shields.io/badge/Claude_API-CC785C?style=for-the-badge&logo=anthropic&logoColor=white)](https://anthropic.com)
+[![ChromaDB](https://img.shields.io/badge/ChromaDB-orange?style=for-the-badge)](https://trychroma.com)
+[![Ollama](https://img.shields.io/badge/Ollama-000000?style=for-the-badge&logo=ollama&logoColor=white)](https://ollama.ai)
+[![Portfolio](https://img.shields.io/badge/Portfolio-aialo.io-C9A84C?style=for-the-badge&logo=google-chrome&logoColor=white)](https://aialo.io)
+
 > **Demo 2** of the AI Automation Portfolio by [Rappahannock Realty Group](https://rappahannockrg.com) — a local real estate consultancy serving the Fredericksburg, Stafford, and Spotsylvania, Virginia corridor.
 
 A production-quality AI real estate assistant that **qualifies leads automatically**. Every conversation Scout has is silently analyzed by a second AI pass that extracts the buyer's budget, timeline, neighborhoods, and motivation — then scores the lead 1–10 with written reasoning. Agents open the dashboard and know who to call first.
