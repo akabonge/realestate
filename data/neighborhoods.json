@@ -1,0 +1,181 @@
+{
+  "neighborhoods": [
+    {
+      "name": "Downtown Fredericksburg",
+      "county": "Fredericksburg City",
+      "type": "Urban / Historic",
+      "median_home_price": 425000,
+      "price_range": "$280,000 – $850,000",
+      "description": "Fredericksburg's historic core along the Rappahannock River. Walkable to restaurants, boutiques, the Amtrak station, and the VRE. Popular with young professionals and empty nesters who want a city feel without DC prices.",
+      "commute_to_dc": "55–75 minutes via I-95 or VRE train (~70 min)",
+      "commute_to_richmond": "55 minutes via I-95",
+      "schools": "Fredericksburg City Public Schools",
+      "highlights": [
+        "Walkable downtown with shops and restaurants",
+        "Amtrak and VRE commuter rail access",
+        "Historic Civil War sites",
+        "Rappahannock riverfront",
+        "No car needed for daily errands"
+      ],
+      "best_for": "Professionals, commuters, history lovers, empty nesters",
+      "avg_property_tax_rate": "0.88%",
+      "hoa_common": false
+    },
+    {
+      "name": "Celebrate Virginia / Rappahannock Landing",
+      "county": "Spotsylvania County",
+      "type": "Master-Planned Suburban",
+      "median_home_price": 495000,
+      "price_range": "$380,000 – $650,000",
+      "description": "One of the fastest-growing areas in Spotsylvania, just south of the city. Large newer homes, resort-style amenities, and strong school ratings. Very popular with families relocating from Northern Virginia.",
+      "commute_to_dc": "60–80 minutes via I-95",
+      "commute_to_richmond": "50 minutes via I-95",
+      "schools": "Spotsylvania County Schools (highly rated)",
+      "highlights": [
+        "New construction available",
+        "Community pools, trails, and sports courts",
+        "Close to Cosner's Corner shopping",
+        "Strong school district",
+        "Many homes with 4–5 bedrooms"
+      ],
+      "best_for": "Families, buyers relocating from NOVA, new construction seekers",
+      "avg_property_tax_rate": "0.82%",
+      "hoa_common": true,
+      "typical_hoa_fee": "$80–$150/month"
+    },
+    {
+      "name": "Embrey Mill",
+      "county": "Stafford County",
+      "type": "Master-Planned Suburban",
+      "median_home_price": 520000,
+      "price_range": "$420,000 – $700,000",
+      "description": "Stafford's premier master-planned community. Award-winning design with a town center, pools, dog parks, trails, and a brewery. Consistently ranks among the top communities in the region for family living.",
+      "commute_to_dc": "50–70 minutes via I-95",
+      "commute_to_quantico": "15 minutes",
+      "commute_to_richmond": "65 minutes via I-95",
+      "schools": "Stafford County Schools",
+      "highlights": [
+        "Town center with shops and dining",
+        "Multiple pools and fitness center",
+        "Miles of walking and biking trails",
+        "Dog parks and community gardens",
+        "Close to Quantico and Fort Gregg-Adams corridor"
+      ],
+      "best_for": "Families, military families, professionals wanting amenities",
+      "avg_property_tax_rate": "0.99%",
+      "hoa_common": true,
+      "typical_hoa_fee": "$130–$200/month"
+    },
+    {
+      "name": "Aquia Harbour",
+      "county": "Stafford County",
+      "type": "Waterfront / Gated",
+      "median_home_price": 460000,
+      "price_range": "$320,000 – $750,000",
+      "description": "A gated waterfront community in northern Stafford with a private marina, golf course, horse stables, and a landing strip. One of the most unique communities in the region — feels like a resort while being 40 miles from DC.",
+      "commute_to_dc": "45–60 minutes via I-95",
+      "commute_to_quantico": "10 minutes",
+      "schools": "Stafford County Schools",
+      "highlights": [
+        "Private marina with boat slips",
+        "18-hole golf course",
+        "Equestrian center",
+        "Private airstrip (Aquia Harbour Airport)",
+        "Gated community with 24-hour security",
+        "Waterfront home options"
+      ],
+      "best_for": "Boaters, golfers, pilots, those seeking resort lifestyle",
+      "avg_property_tax_rate": "0.99%",
+      "hoa_common": true,
+      "typical_hoa_fee": "$200–$350/month"
+    },
+    {
+      "name": "Fawn Lake",
+      "county": "Spotsylvania County",
+      "type": "Luxury Gated / Lakefront",
+      "median_home_price": 780000,
+      "price_range": "$500,000 – $2,500,000",
+      "description": "Spotsylvania's most prestigious gated community built around a 288-acre private lake. Arnold Palmer-designed golf course, country club, beach, tennis, and boating. The region's premier address for luxury buyers.",
+      "commute_to_dc": "65–85 minutes via I-95",
+      "commute_to_richmond": "50 minutes via I-95",
+      "schools": "Spotsylvania County Schools",
+      "highlights": [
+        "288-acre private lake for boating and fishing",
+        "Arnold Palmer golf course and country club",
+        "Private beach",
+        "Tennis and fitness facilities",
+        "Luxury custom homes on large lots",
+        "24-hour gated security"
+      ],
+      "best_for": "Luxury buyers, lake lifestyle, golf enthusiasts, retirees",
+      "avg_property_tax_rate": "0.82%",
+      "hoa_common": true,
+      "typical_hoa_fee": "$350–$600/month"
+    },
+    {
+      "name": "North Stafford / Widewater",
+      "county": "Stafford County",
+      "type": "Suburban / Value",
+      "median_home_price": 395000,
+      "price_range": "$280,000 – $550,000",
+      "description": "The most affordable area in Stafford with easy I-95 access to Quantico and DC. Popular with first-time buyers and military families. Mix of established subdivisions and newer townhome communities.",
+      "commute_to_dc": "40–55 minutes via I-95",
+      "commute_to_quantico": "5 minutes",
+      "schools": "Stafford County Schools",
+      "highlights": [
+        "Best value in Stafford County",
+        "Closest Stafford area to Quantico",
+        "Mix of single-family homes and townhomes",
+        "Strong rental demand",
+        "Access to Potomac River parks"
+      ],
+      "best_for": "First-time buyers, military families, investors, budget-conscious commuters",
+      "avg_property_tax_rate": "0.99%",
+      "hoa_common": false
+    },
+    {
+      "name": "Lake Anna",
+      "county": "Spotsylvania / Louisa County",
+      "type": "Lakefront / Vacation / Investment",
+      "median_home_price": 550000,
+      "price_range": "$250,000 – $3,000,000",
+      "description": "A 17,000-acre reservoir about 35 miles southwest of Fredericksburg. Virginia's most popular inland lake for recreational use. Strong demand for vacation homes, primary residences, and short-term rental investment properties. Two sides: private (residential) and public (recreation).",
+      "commute_to_fredericksburg": "35–45 minutes",
+      "commute_to_richmond": "60 minutes",
+      "commute_to_dc": "90–100 minutes",
+      "highlights": [
+        "17,000-acre lake — Virginia's largest inland reservoir",
+        "Excellent short-term rental (Airbnb) income potential",
+        "Boating, fishing, waterski",
+        "Growing number of year-round residents",
+        "Private-side homes have deeded water access"
+      ],
+      "best_for": "Vacation home buyers, Airbnb investors, retirees, water enthusiasts",
+      "avg_property_tax_rate": "0.82%",
+      "hoa_common": true,
+      "typical_hoa_fee": "$50–$200/month"
+    },
+    {
+      "name": "Leeland Station / Central Park Area",
+      "county": "Stafford County",
+      "type": "Suburban / Transit-Oriented",
+      "median_home_price": 445000,
+      "price_range": "$330,000 – $600,000",
+      "description": "Mid-Stafford location within walking distance of the Leeland Road VRE station. Strong appeal for DC and Pentagon commuters who want a suburban home and an easy train ride. Central Park shopping center nearby for all daily needs.",
+      "commute_to_dc": "VRE to L'Enfant Plaza ~75 min",
+      "commute_to_pentagon": "VRE ~65 min",
+      "schools": "Stafford County Schools",
+      "highlights": [
+        "Walking distance to VRE commuter rail",
+        "No I-95 stress for DC commuters",
+        "Central Park shopping and restaurants",
+        "Strong resale value due to VRE access",
+        "Mix of townhomes and single-family"
+      ],
+      "best_for": "DC/Pentagon commuters, government contractors, families",
+      "avg_property_tax_rate": "0.99%",
+      "hoa_common": true,
+      "typical_hoa_fee": "$100–$180/month"
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "agency": {
+    "name": "Rappahannock Realty Group",
+    "tagline": "Your local guide to home in the Rappahannock region",
+    "phone": "(540) 234-7800",
+    "email": "hello@rappahannockrg.com",
+    "address": "1105 William Street, Suite 200, Fredericksburg, VA 22401",
+    "website": "rappahannockrg.com",
+    "hours": {
+      "monday_friday": "9:00 AM – 6:00 PM",
+      "saturday": "10:00 AM – 4:00 PM",
+      "sunday": "By appointment only"
+    },
+    "service_areas": [
+      "Fredericksburg",
+      "Stafford County",
+      "Spotsylvania County",
+      "King George County",
+      "Caroline County"
+    ],
+    "about": "Rappahannock Realty Group has been serving the Fredericksburg region since 2009. We specialize in residential sales, relocation services, and investment properties across the I-95 corridor. Our agents live in the communities we serve — we know the schools, the commute times, the hidden gems, and the neighborhoods that fit every lifestyle.",
+    "specialties": [
+      "First-time homebuyer guidance",
+      "Military relocation (Fort Gregg-Adams proximity)",
+      "Northern Virginia commuter properties",
+      "New construction in Stafford and Spotsylvania",
+      "Waterfront and Lake Anna properties",
+      "Investment and rental properties"
+    ],
+    "agents": [
+      {
+        "name": "Marcus Webb",
+        "title": "Principal Broker",
+        "phone": "(540) 234-7801",
+        "email": "marcus@rappahannockrg.com",
+        "specialty": "Luxury homes, Fawn Lake, investment properties"
+      },
+      {
+        "name": "Danielle Okonkwo",
+        "title": "Senior Buyer's Agent",
+        "phone": "(540) 234-7802",
+        "email": "danielle@rappahannockrg.com",
+        "specialty": "First-time buyers, Stafford County, new construction"
+      },
+      {
+        "name": "Ray Solis",
+        "title": "Relocation Specialist",
+        "phone": "(540) 234-7803",
+        "email": "ray@rappahannockrg.com",
+        "specialty": "Military relocation, Fort Gregg-Adams, quick-close transactions"
+      }
+    ],
+    "buyer_process": [
+      "1. Free consultation — we learn your goals, budget, and timeline",
+      "2. Pre-approval guidance — we connect you with trusted local lenders",
+      "3. Personalized search — curated listings matched to your criteria",
+      "4. Tours — in-person or virtual, on your schedule",
+      "5. Offer and negotiation — we fight for your best deal",
+      "6. Inspection and due diligence — we guide you through every step",
+      "7. Closing — typically 30–45 days from accepted offer"
+    ],
+    "seller_process": [
+      "1. Free home valuation — accurate, data-driven pricing",
+      "2. Pre-listing prep — staging advice, photography, repairs",
+      "3. Maximum exposure — MLS, Zillow, Realtor.com, social media",
+      "4. Showings and open houses — we handle all scheduling",
+      "5. Offer review — we evaluate every offer and negotiate terms",
+      "6. Contract to close — we manage inspections, appraisals, and paperwork"
+    ],
+    "commission": "Seller's agent fee is typically 2.5–3% of sale price. Buyer representation is free to buyers in most transactions.",
+    "average_days_on_market": "28 days (Fredericksburg metro, 2024)",
+    "testimonials": [
+      {
+        "client": "Priya M., Stafford County",
+        "text": "Scout helped me understand the whole process before I even called an agent. By the time I met Danielle, I already knew what I wanted. Closed in 38 days."
+      },
+      {
+        "client": "James T., Fort Gregg-Adams relocation",
+        "text": "Ray made our PCS move actually painless. Everything was lined up before we even drove down from DC."
+      }
+    ]
+  }
+}

@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scout Lead Intelligence — Rappahannock Realty Group</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #1a2744;
+      --navy-light: #243258;
+      --gold: #c9983a;
+      --gold-light: #e0b55a;
+      --white: #ffffff;
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --gray: #6b7280;
+      --gray-light: #f8fafc;
+      --border: #e2e8f0;
+      --green: #10b981;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --shadow: 0 1px 8px rgba(0,0,0,0.08);
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: var(--bg);
+      color: var(--navy);
+      min-height: 100vh;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 220px;
+      background: var(--navy);
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 10;
+    }
+    .sidebar-logo {
+      padding: 1.5rem 1.25rem 1rem;
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: var(--white);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      line-height: 1.4;
+    }
+    .sidebar-logo span { color: var(--gold); }
+    .sidebar-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.35);
+      padding: 1.25rem 1.25rem 0.4rem;
+    }
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.6rem 1.25rem;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: background 0.15s, color 0.15s;
+      border-radius: 4px;
+      margin: 0.1rem 0.5rem;
+    }
+    .sidebar-nav a:hover, .sidebar-nav a.active {
+      background: rgba(255,255,255,0.08);
+      color: var(--white);
+    }
+    .sidebar-nav a.active { color: var(--gold-light); }
+    .sidebar-bottom {
+      margin-top: auto;
+      padding: 1rem 1.25rem;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .sidebar-bottom a {
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .sidebar-bottom a:hover { color: var(--gold-light); }
+
+    /* MAIN */
+    .main { margin-left: 220px; min-height: 100vh; }
+
+    /* TOPBAR */
+    .topbar {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0.9rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    .topbar-title { font-weight: bold; font-size: 1rem; color: var(--navy); }
+    .topbar-sub { font-size: 0.75rem; color: var(--gray); margin-top: 0.1rem; }
+    .topbar-actions { display: flex; align-items: center; gap: 0.75rem; }
+    .refresh-btn {
+      background: var(--navy);
+      color: var(--white);
+      border: none;
+      border-radius: 6px;
+      padding: 0.45rem 1rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .refresh-btn:hover { background: var(--navy-light); }
+    .last-updated { font-size: 0.75rem; color: var(--gray); }
+
+    /* CONTENT */
+    .content { padding: 2rem; }
+
+    /* SUMMARY CARDS */
+    .summary-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .summary-card {
+      background: var(--card);
+      border-radius: 8px;
+      padding: 1.25rem;
+      box-shadow: var(--shadow);
+      border-top: 3px solid var(--border);
+    }
+    .summary-card.hot { border-top-color: var(--red); }
+    .summary-card.warm { border-top-color: var(--gold); }
+    .summary-card.total { border-top-color: var(--navy); }
+    .summary-card.new { border-top-color: var(--green); }
+    .summary-num { font-size: 2rem; font-weight: bold; color: var(--navy); }
+    .summary-label { font-size: 0.75rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 0.2rem; }
+    .summary-trend { font-size: 0.75rem; color: var(--green); margin-top: 0.3rem; }
+
+    /* LEAD TABLE */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .section-title { font-size: 1rem; font-weight: bold; color: var(--navy); }
+    .filter-row { display: flex; gap: 0.5rem; }
+    .filter-btn {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.3rem 0.8rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      color: var(--gray);
+    }
+    .filter-btn:hover, .filter-btn.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
+
+    .leads-table-wrap {
+      background: var(--card);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      background: var(--gray-light);
+      padding: 0.75rem 1rem;
+      text-align: left;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gray);
+      border-bottom: 1px solid var(--border);
+      font-weight: bold;
+    }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--gray-light); }
+    td { padding: 0.85rem 1rem; font-size: 0.84rem; vertical-align: middle; }
+
+    /* SCORE BADGE */
+    .score-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-weight: bold;
+      font-size: 0.85rem;
+    }
+    .score-hot { background: #fef2f2; color: #dc2626; border: 2px solid #fca5a5; }
+    .score-warm { background: #fffbeb; color: #d97706; border: 2px solid #fcd34d; }
+    .score-cold { background: #f0fdf4; color: #16a34a; border: 2px solid #86efac; }
+    .score-low { background: var(--gray-light); color: var(--gray); border: 2px solid var(--border); }
+
+    .lead-name { font-weight: bold; color: var(--navy); }
+    .lead-email { font-size: 0.75rem; color: var(--gray); }
+    .tag {
+      display: inline-block;
+      background: rgba(26,39,68,0.07);
+      color: var(--navy);
+      font-size: 0.68rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 3px;
+      margin: 0.1rem;
+      font-weight: bold;
+    }
+    .tag.military { background: rgba(201,152,58,0.15); color: #92400e; }
+    .tag.investor { background: rgba(16,185,129,0.12); color: #065f46; }
+    .tag.preapproved { background: rgba(59,130,246,0.12); color: #1e40af; }
+
+    .timeline-chip {
+      font-size: 0.75rem;
+      color: var(--gray);
+      white-space: nowrap;
+    }
+    .budget-range { font-size: 0.8rem; color: var(--navy); font-weight: bold; }
+    .budget-sub { font-size: 0.72rem; color: var(--gray); }
+
+    .detail-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.3rem 0.6rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+      color: var(--navy);
+      transition: all 0.15s;
+    }
+    .detail-btn:hover { background: var(--navy); color: var(--white); border-color: var(--navy); }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--white);
+      border-radius: 10px;
+      max-width: 560px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      transform: translateY(12px);
+      transition: transform 0.2s;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-title { font-weight: bold; font-size: 1rem; }
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.3rem;
+      cursor: pointer;
+      color: var(--gray);
+      line-height: 1;
+    }
+    .modal-body { padding: 1.5rem; }
+    .modal-section { margin-bottom: 1.25rem; }
+    .modal-section-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gray); margin-bottom: 0.5rem; font-weight: bold; }
+    .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .modal-field label { font-size: 0.72rem; color: var(--gray); display: block; }
+    .modal-field span { font-size: 0.9rem; color: var(--navy); font-weight: 500; }
+    .score-bar-wrap { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+    .score-bar-bg { flex: 1; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+    .score-bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
+    .reasoning-box {
+      background: var(--gray-light);
+      border-radius: 6px;
+      padding: 0.75rem;
+      font-size: 0.84rem;
+      color: var(--navy);
+      line-height: 1.5;
+    }
+    .summary-box {
+      background: rgba(201,152,58,0.08);
+      border-left: 3px solid var(--gold);
+      padding: 0.75rem;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.85rem;
+      color: var(--navy);
+      font-style: italic;
+    }
+
+    /* EMPTY STATE */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--gray);
+    }
+    .empty-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.4; }
+    .empty-title { font-size: 1.1rem; font-weight: bold; color: var(--navy); margin-bottom: 0.5rem; }
+    .empty-sub { font-size: 0.875rem; }
+
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">Rappahannock<br><span>Realty Group</span></div>
+  <div class="sidebar-label">Intelligence</div>
+  <nav class="sidebar-nav">
+    <a href="#" class="active">&#9632; Lead Dashboard</a>
+  </nav>
+  <div class="sidebar-label">App</div>
+  <nav class="sidebar-nav">
+    <a href="/">&#9632; Back to Website</a>
+  </nav>
+  <div class="sidebar-bottom">
+    <a href="mailto:hello@rappahannockrg.com">&#9632; hello@rappahannockrg.com</a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div class="topbar-title">Scout Lead Intelligence</div>
+      <div class="topbar-sub">AI-qualified leads from the website chatbot</div>
+    </div>
+    <div class="topbar-actions">
+      <span class="last-updated" id="last-updated">Loading...</span>
+      <button class="refresh-btn" onclick="loadLeads()">Refresh</button>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- SUMMARY CARDS -->
+    <div class="summary-cards">
+      <div class="summary-card total">
+        <div class="summary-num" id="total-leads">—</div>
+        <div class="summary-label">Total Leads</div>
+      </div>
+      <div class="summary-card hot">
+        <div class="summary-num" id="hot-leads">—</div>
+        <div class="summary-label">Hot (Score 8–10)</div>
+        <div class="summary-trend">Ready to act now</div>
+      </div>
+      <div class="summary-card warm">
+        <div class="summary-num" id="warm-leads">—</div>
+        <div class="summary-label">Warm (Score 5–7)</div>
+        <div class="summary-trend">Active, qualifying</div>
+      </div>
+      <div class="summary-card new">
+        <div class="summary-num" id="avg-score">—</div>
+        <div class="summary-label">Avg. Score</div>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="section-header">
+      <div class="section-title">All Leads</div>
+      <div class="filter-row">
+        <button class="filter-btn active" onclick="filterLeads('all', this)">All</button>
+        <button class="filter-btn" onclick="filterLeads('hot', this)">Hot</button>
+        <button class="filter-btn" onclick="filterLeads('warm', this)">Warm</button>
+        <button class="filter-btn" onclick="filterLeads('cold', this)">Early Stage</button>
+      </div>
+    </div>
+
+    <div class="leads-table-wrap">
+      <div id="leads-body">
+        <div class="empty-state">
+          <div class="empty-icon">&#128270;</div>
+          <div class="empty-title">Loading leads...</div>
+          <div class="empty-sub">Fetching data from Scout</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal-content">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-name">Lead Details</div>
+      <button class="modal-close" onclick="closeModalDirect()">&times;</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+  const API_BASE = window.location.origin + '/api';
+  let allLeads = [];
+  let currentFilter = 'all';
+
+  async function loadLeads() {
+    try {
+      const res = await fetch(`${API_BASE}/leads`);
+      const data = await res.json();
+      allLeads = data.leads || [];
+
+      updateSummary(allLeads);
+      renderTable(allLeads, currentFilter);
+
+      const now = new Date();
+      document.getElementById('last-updated').textContent =
+        'Updated ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    } catch (e) {
+      document.getElementById('leads-body').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">&#9888;</div>
+          <div class="empty-title">Could not load leads</div>
+          <div class="empty-sub">Make sure the server is running at ${API_BASE}</div>
+        </div>`;
+    }
+  }
+
+  function updateSummary(leads) {
+    const hot = leads.filter(l => l.score >= 8).length;
+    const warm = leads.filter(l => l.score >= 5 && l.score < 8).length;
+    const avg = leads.length
+      ? (leads.reduce((s, l) => s + (l.score || 0), 0) / leads.length).toFixed(1)
+      : '—';
+
+    document.getElementById('total-leads').textContent = leads.length;
+    document.getElementById('hot-leads').textContent = hot;
+    document.getElementById('warm-leads').textContent = warm;
+    document.getElementById('avg-score').textContent = avg;
+  }
+
+  function filterLeads(filter, btn) {
+    currentFilter = filter;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderTable(allLeads, filter);
+  }
+
+  function renderTable(leads, filter) {
+    let filtered = leads;
+    if (filter === 'hot') filtered = leads.filter(l => l.score >= 8);
+    else if (filter === 'warm') filtered = leads.filter(l => l.score >= 5 && l.score < 8);
+    else if (filter === 'cold') filtered = leads.filter(l => l.score < 5);
+
+    if (!filtered.length) {
+      document.getElementById('leads-body').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">&#128161;</div>
+          <div class="empty-title">${leads.length === 0 ? 'No leads yet' : 'No leads in this category'}</div>
+          <div class="empty-sub">${leads.length === 0 ? 'Start a conversation on the website and Scout will capture leads automatically.' : 'Try a different filter.'}</div>
+        </div>`;
+      return;
+    }
+
+    // Sort hot first
+    filtered = [...filtered].sort((a, b) => (b.score || 0) - (a.score || 0));
+
+    const rows = filtered.map(lead => {
+      const scoreClass = lead.score >= 8 ? 'score-hot' : lead.score >= 5 ? 'score-warm' : lead.score >= 3 ? 'score-cold' : 'score-low';
+      const budget = lead.budget_min || lead.budget_max
+        ? `$${fmtBudget(lead.budget_min)} – $${fmtBudget(lead.budget_max)}`
+        : '—';
+      const tags = [
+        lead.is_military && '<span class="tag military">Military</span>',
+        lead.is_investor && '<span class="tag investor">Investor</span>',
+        lead.is_pre_approved && '<span class="tag preapproved">Pre-Approved</span>',
+      ].filter(Boolean).join('');
+      const nbhds = lead.neighborhoods?.length ? lead.neighborhoods.slice(0, 2).join(', ') : '—';
+      const date = lead.captured_at ? new Date(lead.captured_at).toLocaleDateString() : '—';
+
+      return `<tr>
+        <td><span class="score-badge ${scoreClass}">${lead.score || '?'}</span></td>
+        <td>
+          <div class="lead-name">${lead.name || 'Unknown'}</div>
+          <div class="lead-email">${lead.email || lead.phone || 'No contact yet'}</div>
+        </td>
+        <td>
+          <div class="budget-range">${budget}</div>
+          <div class="budget-sub">${lead.bedrooms ? lead.bedrooms + ' bed' : ''} ${lead.home_type || ''}</div>
+        </td>
+        <td>${nbhds}</td>
+        <td><div class="timeline-chip">${lead.timeline || '—'}</div></td>
+        <td>${tags || '<span style="color:var(--gray);font-size:0.8rem;">—</span>'}</td>
+        <td style="color:var(--gray);font-size:0.78rem;">${date}</td>
+        <td><button class="detail-btn" onclick="openModal(${JSON.stringify(JSON.stringify(lead)).replace(/'/g, "&#39;")})">Details</button></td>
+      </tr>`;
+    }).join('');
+
+    document.getElementById('leads-body').innerHTML = `
+      <table>
+        <thead>
+          <tr>
+            <th>Score</th>
+            <th>Lead</th>
+            <th>Budget / Type</th>
+            <th>Neighborhoods</th>
+            <th>Timeline</th>
+            <th>Tags</th>
+            <th>Captured</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+  }
+
+  function fmtBudget(n) {
+    if (!n) return '?';
+    if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+    if (n >= 1000) return Math.round(n / 1000) + 'K';
+    return n;
+  }
+
+  function openModal(jsonStr) {
+    const lead = JSON.parse(jsonStr);
+    document.getElementById('modal-name').textContent = lead.name || 'Lead Details';
+
+    const score = lead.score || 0;
+    const barColor = score >= 8 ? '#dc2626' : score >= 5 ? '#d97706' : '#10b981';
+    const pct = Math.round((score / 10) * 100);
+
+    const fields = [
+      ['Name', lead.name],
+      ['Email', lead.email],
+      ['Phone', lead.phone],
+      ['Budget', lead.budget_min || lead.budget_max ? `$${fmtBudget(lead.budget_min)} – $${fmtBudget(lead.budget_max)}` : null],
+      ['Bedrooms', lead.bedrooms],
+      ['Home Type', lead.home_type],
+      ['Timeline', lead.timeline],
+      ['Motivation', lead.motivation],
+      ['Neighborhoods', lead.neighborhoods?.join(', ')],
+      ['Pre-Approved', lead.is_pre_approved === true ? 'Yes' : lead.is_pre_approved === false ? 'No' : null],
+      ['Military', lead.is_military === true ? 'Yes' : lead.is_military === false ? 'No' : null],
+      ['Investor', lead.is_investor === true ? 'Yes' : null],
+    ].filter(([, v]) => v);
+
+    document.getElementById('modal-body').innerHTML = `
+      <div class="modal-section">
+        <div class="modal-section-title">AI Lead Score</div>
+        <div class="score-bar-wrap">
+          <span class="score-badge ${score >= 8 ? 'score-hot' : score >= 5 ? 'score-warm' : 'score-cold'}" style="width:40px;height:40px;font-size:1rem;">${score}</span>
+          <div style="flex:1;">
+            <div class="score-bar-bg"><div class="score-bar-fill" style="width:${pct}%;background:${barColor};"></div></div>
+            <div style="font-size:0.72rem;color:var(--gray);margin-top:0.2rem;">${score}/10 — ${score >= 8 ? 'Hot lead — contact ASAP' : score >= 5 ? 'Warm — follow up soon' : 'Early stage — nurture'}</div>
+          </div>
+        </div>
+        ${lead.score_reasoning ? `<div class="reasoning-box">${lead.score_reasoning}</div>` : ''}
+      </div>
+
+      ${lead.conversation_summary ? `
+      <div class="modal-section">
+        <div class="modal-section-title">Conversation Summary</div>
+        <div class="summary-box">${lead.conversation_summary}</div>
+      </div>` : ''}
+
+      <div class="modal-section">
+        <div class="modal-section-title">Lead Profile</div>
+        <div class="modal-grid">
+          ${fields.map(([label, val]) => `
+            <div class="modal-field"><label>${label}</label><span>${val}</span></div>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">Session</div>
+        <div class="modal-field"><label>Session ID</label><span style="font-size:0.75rem;word-break:break-all;">${lead.session_id}</span></div>
+        <div class="modal-field" style="margin-top:0.5rem;"><label>Captured</label><span>${lead.captured_at ? new Date(lead.captured_at).toLocaleString() : '—'}</span></div>
+      </div>
+    `;
+
+    document.getElementById('modal-overlay').classList.add('open');
+  }
+
+  function closeModal(e) {
+    if (e.target === document.getElementById('modal-overlay')) closeModalDirect();
+  }
+  function closeModalDirect() {
+    document.getElementById('modal-overlay').classList.remove('open');
+  }
+
+  // Initial load + auto-refresh every 30 seconds
+  loadLeads();
+  setInterval(loadLeads, 30000);
+</script>
+</body>
+</html>

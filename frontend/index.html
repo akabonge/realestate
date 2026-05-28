@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rappahannock Realty Group — Fredericksburg, VA</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #1a2744;
+      --navy-light: #243258;
+      --gold: #c9983a;
+      --gold-light: #e0b55a;
+      --cream: #f9f6f0;
+      --white: #ffffff;
+      --gray: #6b7280;
+      --gray-light: #f3f4f6;
+      --shadow: 0 4px 24px rgba(26,39,68,0.12);
+    }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: var(--cream);
+      color: var(--navy);
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      background: var(--navy);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-logo {
+      color: var(--white);
+      font-size: 1.1rem;
+      font-weight: bold;
+      letter-spacing: 0.02em;
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-links a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.875rem;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold-light); }
+    .nav-btn {
+      background: var(--gold);
+      color: var(--navy) !important;
+      padding: 0.4rem 1rem;
+      border-radius: 4px;
+      font-weight: bold !important;
+    }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-tag {
+      display: inline-block;
+      background: rgba(201,152,58,0.2);
+      color: var(--gold-light);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.8rem;
+      border-radius: 2px;
+      margin-bottom: 1rem;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    .hero h1 em { color: var(--gold-light); font-style: normal; }
+    .hero p {
+      color: rgba(255,255,255,0.75);
+      font-family: 'Arial', sans-serif;
+      font-size: 1.05rem;
+      max-width: 560px;
+      margin: 0 auto 2rem;
+    }
+    .hero-cta {
+      display: inline-flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.7rem 1.6rem;
+      border-radius: 4px;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-gold { background: var(--gold); color: var(--navy); }
+    .btn-gold:hover { background: var(--gold-light); }
+    .btn-outline { background: transparent; color: var(--white); border: 1px solid rgba(255,255,255,0.4); }
+    .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.08); }
+
+    /* STATS BAR */
+    .stats-bar {
+      background: var(--white);
+      border-bottom: 1px solid #e5e7eb;
+      padding: 1.2rem 2rem;
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+    .stat { text-align: center; }
+    .stat-num { font-size: 1.6rem; font-weight: bold; color: var(--navy); }
+    .stat-num span { color: var(--gold); }
+    .stat-label { font-family: 'Arial', sans-serif; font-size: 0.75rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.08em; }
+
+    /* SECTION */
+    section { padding: 4rem 2rem; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+    h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--navy); margin-bottom: 0.5rem; }
+    .section-sub { font-family: 'Arial', sans-serif; color: var(--gray); font-size: 0.95rem; margin-bottom: 2.5rem; }
+
+    /* LISTINGS GRID */
+    .listings-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 1.5rem; }
+    .listing-card {
+      background: var(--white);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .listing-card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(26,39,68,0.18); }
+    .listing-img {
+      height: 180px;
+      background: linear-gradient(135deg, var(--navy-light), var(--navy));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .listing-badge {
+      position: absolute;
+      top: 0.75rem;
+      left: 0.75rem;
+      background: var(--gold);
+      color: var(--navy);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.7rem;
+      font-weight: bold;
+      padding: 0.2rem 0.5rem;
+      border-radius: 2px;
+      text-transform: uppercase;
+    }
+    .listing-house-icon { font-size: 3rem; opacity: 0.3; }
+    .listing-body { padding: 1.25rem; }
+    .listing-price { font-size: 1.4rem; font-weight: bold; color: var(--navy); }
+    .listing-address { font-family: 'Arial', sans-serif; font-size: 0.8rem; color: var(--gray); margin: 0.2rem 0 0.75rem; }
+    .listing-specs {
+      display: flex;
+      gap: 1rem;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.8rem;
+      color: var(--gray);
+      border-top: 1px solid #f0f0f0;
+      padding-top: 0.75rem;
+    }
+    .listing-spec { display: flex; flex-direction: column; }
+    .listing-spec strong { color: var(--navy); font-size: 0.9rem; }
+    .listing-neighborhood {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      color: var(--gold);
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.25rem;
+    }
+
+    /* NEIGHBORHOODS */
+    .neighborhoods-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.25rem; }
+    .nbhd-card {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      border-left: 4px solid var(--gold);
+      transition: transform 0.2s;
+    }
+    .nbhd-card:hover { transform: translateY(-3px); }
+    .nbhd-name { font-size: 1.05rem; font-weight: bold; color: var(--navy); margin-bottom: 0.2rem; }
+    .nbhd-county { font-family: 'Arial', sans-serif; font-size: 0.75rem; color: var(--gray); margin-bottom: 0.5rem; }
+    .nbhd-price { font-family: 'Arial', sans-serif; font-size: 0.85rem; color: var(--gold); font-weight: bold; margin-bottom: 0.5rem; }
+    .nbhd-best { font-family: 'Arial', sans-serif; font-size: 0.8rem; color: var(--gray); font-style: italic; }
+
+    /* AGENTS */
+    .agents-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+    .agent-card {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+    .agent-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--navy), var(--navy-light));
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      color: rgba(255,255,255,0.5);
+    }
+    .agent-name { font-size: 1.1rem; font-weight: bold; color: var(--navy); }
+    .agent-title { font-family: 'Arial', sans-serif; font-size: 0.8rem; color: var(--gold); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; }
+    .agent-specialty { font-family: 'Arial', sans-serif; font-size: 0.85rem; color: var(--gray); margin-bottom: 0.75rem; }
+    .agent-contact { font-family: 'Arial', sans-serif; font-size: 0.8rem; color: var(--navy); }
+
+    /* CTA SECTION */
+    .cta-section {
+      background: var(--navy);
+      color: var(--white);
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+    .cta-section h2 { color: var(--white); margin-bottom: 0.5rem; }
+    .cta-section p { color: rgba(255,255,255,0.7); font-family: 'Arial', sans-serif; font-size: 0.95rem; margin-bottom: 2rem; }
+
+    /* FOOTER */
+    footer {
+      background: #111827;
+      color: rgba(255,255,255,0.5);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.8rem;
+      text-align: center;
+      padding: 1.5rem;
+    }
+
+    /* ==================== CHAT WIDGET ==================== */
+    #chat-toggle {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 58px;
+      height: 58px;
+      background: var(--navy);
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      transition: transform 0.2s, background 0.2s;
+    }
+    #chat-toggle:hover { background: var(--navy-light); transform: scale(1.08); }
+    #chat-toggle svg { width: 26px; height: 26px; fill: var(--white); }
+    .chat-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      width: 16px;
+      height: 16px;
+      background: var(--gold);
+      border-radius: 50%;
+      border: 2px solid var(--white);
+    }
+
+    #chat-window {
+      position: fixed;
+      bottom: 6rem;
+      right: 2rem;
+      width: 380px;
+      max-height: 580px;
+      background: var(--white);
+      border-radius: 12px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.25);
+      display: flex;
+      flex-direction: column;
+      z-index: 999;
+      transform: scale(0.92) translateY(12px);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.22s ease, opacity 0.22s ease;
+      overflow: hidden;
+    }
+    #chat-window.open {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .chat-header {
+      background: var(--navy);
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .chat-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .chat-header-info { flex: 1; }
+    .chat-name { color: var(--white); font-size: 0.95rem; font-weight: bold; }
+    .chat-status { font-family: 'Arial', sans-serif; font-size: 0.72rem; color: rgba(255,255,255,0.6); }
+    .chat-status-dot {
+      display: inline-block;
+      width: 7px; height: 7px;
+      background: #4ade80;
+      border-radius: 50%;
+      margin-right: 4px;
+    }
+    .chat-close-btn {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.6);
+      font-size: 1.3rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0.2rem;
+    }
+    .chat-close-btn:hover { color: var(--white); }
+
+    #chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      scroll-behavior: smooth;
+    }
+    .msg {
+      max-width: 85%;
+      padding: 0.6rem 0.9rem;
+      border-radius: 12px;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+    .msg.assistant {
+      background: var(--gray-light);
+      color: var(--navy);
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
+    .msg.user {
+      background: var(--navy);
+      color: var(--white);
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+    .msg-source {
+      font-size: 0.68rem;
+      color: var(--gray);
+      margin-top: 0.25rem;
+      font-family: 'Arial', sans-serif;
+      align-self: flex-start;
+      padding: 0 0.2rem;
+    }
+
+    .typing-indicator {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      padding: 0.6rem 0.9rem;
+      background: var(--gray-light);
+      border-radius: 12px;
+      border-bottom-left-radius: 4px;
+      width: fit-content;
+    }
+    .typing-dot {
+      width: 7px; height: 7px;
+      background: var(--gray);
+      border-radius: 50%;
+      animation: bounce 1.2s infinite;
+    }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-5px); }
+    }
+
+    .chat-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      padding: 0.5rem 1rem 0;
+    }
+    .chip {
+      background: rgba(26,39,68,0.07);
+      color: var(--navy);
+      border: 1px solid rgba(26,39,68,0.15);
+      border-radius: 20px;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      padding: 0.3rem 0.7rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .chip:hover { background: var(--navy); color: var(--white); }
+
+    .chat-input-area {
+      padding: 0.75rem;
+      border-top: 1px solid #f0f0f0;
+      display: flex;
+      gap: 0.5rem;
+    }
+    #chat-input {
+      flex: 1;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 0.55rem 0.8rem;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.875rem;
+      resize: none;
+      outline: none;
+      transition: border-color 0.2s;
+      height: 38px;
+    }
+    #chat-input:focus { border-color: var(--navy); }
+    #chat-send {
+      background: var(--navy);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      width: 38px;
+      height: 38px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+    #chat-send:hover { background: var(--gold); }
+    #chat-send svg { width: 16px; height: 16px; fill: var(--white); }
+
+    @media (max-width: 480px) {
+      #chat-window { width: calc(100vw - 1rem); right: 0.5rem; bottom: 5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Rappahannock <span>Realty Group</span></div>
+  <div class="nav-links">
+    <a href="#listings">Listings</a>
+    <a href="#neighborhoods">Neighborhoods</a>
+    <a href="#agents">Agents</a>
+    <a href="/dashboard" target="_blank">Dashboard</a>
+    <a href="tel:5402347800" class="nav-btn">(540) 234-7800</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-tag">Fredericksburg · Stafford · Spotsylvania</div>
+  <h1>Find Your Home<br>in <em>Rappahannock Country</em></h1>
+  <p>Local expertise from agents who live, work, and raise families in the communities they sell.</p>
+  <div class="hero-cta">
+    <a href="#listings" class="btn btn-gold">Browse Listings</a>
+    <button class="btn btn-outline" onclick="openChat()">Ask Scout, Our AI Guide</button>
+  </div>
+</header>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-num">$465<span>K</span></div>
+    <div class="stat-label">Median Sale Price</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">28</div>
+    <div class="stat-label">Avg. Days on Market</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">98.5<span>%</span></div>
+    <div class="stat-label">List-to-Sale Ratio</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">+4.2<span>%</span></div>
+    <div class="stat-label">Year-Over-Year Appreciation</div>
+  </div>
+</div>
+
+<!-- LISTINGS -->
+<section id="listings" style="background: var(--cream);">
+  <div class="section-inner">
+    <p class="section-label">Active Listings</p>
+    <h2>Homes Available Now</h2>
+    <p class="section-sub">Curated properties across Fredericksburg, Stafford, and Spotsylvania.</p>
+    <div class="listings-grid" id="listings-grid">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- NEIGHBORHOODS -->
+<section id="neighborhoods" style="background: var(--white);">
+  <div class="section-inner">
+    <p class="section-label">Know the Area</p>
+    <h2>Neighborhoods We Know Inside Out</h2>
+    <p class="section-sub">From lakefront retreats to commuter-friendly master-planned communities — we know what every zip code is really like.</p>
+    <div class="neighborhoods-grid" id="neighborhoods-grid">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- AGENTS -->
+<section id="agents" style="background: var(--cream);">
+  <div class="section-inner">
+    <p class="section-label">Our Team</p>
+    <h2>Agents Who Know This Market</h2>
+    <p class="section-sub">We live in the neighborhoods we sell. No cold calls, no scripts — just real local knowledge.</p>
+    <div class="agents-grid">
+      <div class="agent-card">
+        <div class="agent-avatar">&#9632;</div>
+        <div class="agent-name">Marcus Webb</div>
+        <div class="agent-title">Principal Broker</div>
+        <div class="agent-specialty">Luxury homes, Fawn Lake, investment properties</div>
+        <div class="agent-contact">(540) 234-7801 &mdash; marcus@rappahannockrg.com</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-avatar">&#9632;</div>
+        <div class="agent-name">Danielle Okonkwo</div>
+        <div class="agent-title">Senior Buyer's Agent</div>
+        <div class="agent-specialty">First-time buyers, Stafford County, new construction</div>
+        <div class="agent-contact">(540) 234-7802 &mdash; danielle@rappahannockrg.com</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-avatar">&#9632;</div>
+        <div class="agent-name">Ray Solis</div>
+        <div class="agent-title">Relocation Specialist</div>
+        <div class="agent-specialty">Military relocation, Fort Gregg-Adams, VA loans</div>
+        <div class="agent-contact">(540) 234-7803 &mdash; ray@rappahannockrg.com</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="section-inner">
+    <h2>Ready to Talk?</h2>
+    <p>Whether you're buying, selling, or just figuring out if the market makes sense for you — we're here.</p>
+    <a href="tel:5402347800" class="btn btn-gold">(540) 234-7800</a>
+    &nbsp;&nbsp;
+    <button class="btn btn-outline" onclick="openChat()">Chat with Scout</button>
+  </div>
+</div>
+
+<footer>
+  &copy; 2025 Rappahannock Realty Group &bull; 1105 William Street, Suite 200, Fredericksburg, VA 22401 &bull; hello@rappahannockrg.com
+</footer>
+
+<!-- CHAT TOGGLE -->
+<button id="chat-toggle" onclick="toggleChat()" title="Chat with Scout">
+  <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+  <div class="chat-badge"></div>
+</button>
+
+<!-- CHAT WINDOW -->
+<div id="chat-window">
+  <div class="chat-header">
+    <div class="chat-avatar">S</div>
+    <div class="chat-header-info">
+      <div class="chat-name">Scout</div>
+      <div class="chat-status"><span class="chat-status-dot"></span>Your local real estate guide</div>
+    </div>
+    <button class="chat-close-btn" onclick="toggleChat()">&times;</button>
+  </div>
+
+  <div id="chat-messages">
+    <div class="msg assistant">Hi, I'm Scout — Rappahannock Realty Group's local guide. Whether you're looking to buy, sell, or just explore the Fredericksburg area market, I'm here to help. What brings you in today?</div>
+  </div>
+
+  <div class="chat-chips" id="chat-chips">
+    <button class="chip" onclick="sendChip(this)">What's the market like?</button>
+    <button class="chip" onclick="sendChip(this)">Best areas for families?</button>
+    <button class="chip" onclick="sendChip(this)">I'm a first-time buyer</button>
+    <button class="chip" onclick="sendChip(this)">Military relocation</button>
+  </div>
+
+  <div class="chat-input-area">
+    <textarea id="chat-input" placeholder="Ask me anything about the local market..." rows="1"></textarea>
+    <button id="chat-send" onclick="sendMessage()">
+      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+  const API_BASE = window.location.origin + '/api';
+  const SESSION_ID = 'user_' + Math.random().toString(36).slice(2, 9);
+  let chatOpen = false;
+
+  // ── Data rendering ──────────────────────────────────────────────
+  const listings = [
+    { id:'RRG-001', price:'$524,900', address:'4712 River Bend Ct, Fredericksburg', neighborhood:'Celebrate Virginia', bed:4, bath:3.5, sqft:'2,850', badge:'New' },
+    { id:'RRG-002', price:'$589,000', address:'210 Patriot Ln, Stafford', neighborhood:'Embrey Mill', bed:5, bath:4, sqft:'3,200', badge:'Hot' },
+    { id:'RRG-003', price:'$695,000', address:'88 Harbour View Dr, Stafford', neighborhood:'Aquia Harbour', bed:4, bath:3, sqft:'3,400', badge:'Waterfront' },
+    { id:'RRG-004', price:'$1,150,000', address:'3301 Chancellor Oak Dr, Fredericksburg', neighborhood:'Fawn Lake', bed:5, bath:5.5, sqft:'5,100', badge:'Luxury' },
+    { id:'RRG-005', price:'$389,000', address:'712 Stafford Lakes Pkwy #14, Stafford', neighborhood:'Stafford Lakes', bed:3, bath:2.5, sqft:'1,880', badge:'Great Value' },
+    { id:'RRG-006', price:'$459,000', address:'190 Leeland Rd, Stafford', neighborhood:'Leeland Station', bed:4, bath:3, sqft:'2,340', badge:'VRE Access' },
+    { id:'RRG-007', price:'$875,000', address:'5840 Lake Shore Dr, Bumpass', neighborhood:'Lake Anna', bed:5, bath:4, sqft:'3,100', badge:'Airbnb Income' },
+    { id:'RRG-008', price:'$349,000', address:'1403 Caroline St, Fredericksburg', neighborhood:'Downtown', bed:3, bath:2, sqft:'1,650', badge:'Historic' },
+  ];
+
+  const neighborhoods = [
+    { name:'Embrey Mill', county:'Stafford County', price:'$420K–$700K', best:'Families, amenity seekers' },
+    { name:'Celebrate Virginia', county:'Spotsylvania County', price:'$380K–$650K', best:'Families, NOVA relocators' },
+    { name:'Fawn Lake', county:'Spotsylvania County', price:'$500K–$2.5M', best:'Luxury, golf, lake lifestyle' },
+    { name:'Aquia Harbour', county:'Stafford County', price:'$320K–$750K', best:'Boaters, pilots, golfers' },
+    { name:'Leeland Station', county:'Stafford County', price:'$330K–$600K', best:'DC/Pentagon commuters (VRE)' },
+    { name:'Lake Anna', county:'Spotsylvania County', price:'$250K–$3M', best:'Vacation homes, Airbnb investors' },
+    { name:'North Stafford', county:'Stafford County', price:'$280K–$550K', best:'Military, first-time buyers' },
+    { name:'Downtown Fredericksburg', county:'Fredericksburg City', price:'$280K–$850K', best:'Walkable lifestyle, commuters' },
+  ];
+
+  document.getElementById('listings-grid').innerHTML = listings.map(l => `
+    <div class="listing-card">
+      <div class="listing-img">
+        <span class="listing-badge">${l.badge}</span>
+        <span class="listing-house-icon">&#127968;</span>
+      </div>
+      <div class="listing-body">
+        <div class="listing-neighborhood">${l.neighborhood}</div>
+        <div class="listing-price">${l.price}</div>
+        <div class="listing-address">${l.address}</div>
+        <div class="listing-specs">
+          <div class="listing-spec"><strong>${l.bed}</strong> Beds</div>
+          <div class="listing-spec"><strong>${l.bath}</strong> Baths</div>
+          <div class="listing-spec"><strong>${l.sqft}</strong> sqft</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('neighborhoods-grid').innerHTML = neighborhoods.map(n => `
+    <div class="nbhd-card">
+      <div class="nbhd-name">${n.name}</div>
+      <div class="nbhd-county">${n.county}</div>
+      <div class="nbhd-price">${n.price}</div>
+      <div class="nbhd-best">Best for: ${n.best}</div>
+    </div>
+  `).join('');
+
+  // ── Chat ────────────────────────────────────────────────────────
+  function toggleChat() {
+    chatOpen = !chatOpen;
+    document.getElementById('chat-window').classList.toggle('open', chatOpen);
+  }
+  function openChat() {
+    chatOpen = true;
+    document.getElementById('chat-window').classList.add('open');
+  }
+
+  function sendChip(el) {
+    document.getElementById('chat-input').value = el.textContent;
+    el.closest('.chat-chips').style.display = 'none';
+    sendMessage();
+  }
+
+  async function sendMessage() {
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim();
+    if (!text) return;
+
+    appendMsg(text, 'user');
+    input.value = '';
+    const typing = showTyping();
+
+    try {
+      const res = await fetch(`${API_BASE}/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, session_id: SESSION_ID }),
+      });
+      const data = await res.json();
+      removeTyping(typing);
+      appendMsg(data.response, 'assistant', data.sources);
+    } catch (e) {
+      removeTyping(typing);
+      appendMsg("I'm having trouble connecting right now. Try calling us at (540) 234-7800.", 'assistant');
+    }
+  }
+
+  function appendMsg(text, role, sources) {
+    const container = document.getElementById('chat-messages');
+    const div = document.createElement('div');
+    div.className = `msg ${role}`;
+    div.textContent = text;
+    container.appendChild(div);
+    if (sources && sources.length) {
+      const src = document.createElement('div');
+      src.className = 'msg-source';
+      const unique = [...new Set(sources)].join(', ');
+      src.textContent = `Source: ${unique}`;
+      container.appendChild(src);
+    }
+    container.scrollTop = container.scrollHeight;
+  }
+
+  function showTyping() {
+    const container = document.getElementById('chat-messages');
+    const div = document.createElement('div');
+    div.className = 'typing-indicator';
+    div.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+    return div;
+  }
+
+  function removeTyping(el) { el?.remove(); }
+
+  document.getElementById('chat-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  });
+</script>
+</body>
+</html>
