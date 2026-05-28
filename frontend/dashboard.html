@@ -828,7 +828,8 @@
   }
 
   // ── Follow-Up Email ──────────────────────────────────────────────
-  function followUp(lead) {
+  function followUp(jsonStr) {
+    const lead = JSON.parse(jsonStr);
     const name = lead.name || 'there';
     const firstName = name.split(' ')[0];
     const budget = lead.budget_max ? `$${fmtBudget(lead.budget_max)}` : (lead.budget_min ? `around $${fmtBudget(lead.budget_min)}` : '');
