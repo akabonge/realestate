@@ -1,4 +1,4 @@
-from fastapi import APIRouter, BackgroundTasks, HTTPException
+from fastapi import APIRouter, BackgroundTasks, HTTPException, Request
 from pydantic import BaseModel
 from typing import Optional
 from app.models import ChatRequest, ChatResponse, LeadListResponse
@@ -23,8 +23,9 @@ _sessions: dict[str, list[dict]] = {}
 
 
 @router.post("/chat", response_model=ChatResponse)
-async def chat(req: ChatRequest, background_tasks: BackgroundTasks):
-    guard = check_input(req.message, req.session_id)
+async def chat(req: ChatRequest, background_tasks: BackgroundTasks, request: Request):
+    ip = request.headers.get("X-Forwarded-For", request.client.host or "").split(",")[0].strip()
+    guard = check_input(req.message, req.session_id, ip=ip)
     if not guard.allowed:
         return ChatResponse(
             response=guard.reason,

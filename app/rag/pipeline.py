@@ -66,5 +66,6 @@ def _call_ollama(system: str, query: str, history: list[dict], settings) -> str:
     response = ollama.chat(
         model=settings.ollama_model,
         messages=messages,
+        options={"num_predict": 512},
     )
     return response["message"]["content"]
