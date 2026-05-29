@@ -12,3 +12,4 @@ leads.json
 dist/
 build/
 .pytest_cache/
+*.db
