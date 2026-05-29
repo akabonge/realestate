@@ -7,6 +7,7 @@ from app.rag.lead_extractor import extract_and_score
 from app.lead_store import get_all_leads, get_lead, new_lead, upsert_lead
 from app.config import get_settings
 from app.rag.embedder import get_collection
+from app.guardrails import check_input, check_output
 
 
 class ContactUpdate(BaseModel):
@@ -23,13 +24,24 @@ _sessions: dict[str, list[dict]] = {}
 
 @router.post("/chat", response_model=ChatResponse)
 async def chat(req: ChatRequest, background_tasks: BackgroundTasks):
+    guard = check_input(req.message, req.session_id)
+    if not guard.allowed:
+        return ChatResponse(
+            response=guard.reason,
+            sources=[],
+            session_id=req.session_id,
+            provider="guardrail",
+            lead_captured=False,
+        )
+
     settings = get_settings()
     history = _sessions.get(req.session_id, [])
 
-    response_text, sources, provider = generate_response(req.message, history)
+    response_text, sources, provider = generate_response(guard.cleaned_input, history)
+    _, response_text = check_output(response_text)
 
     history = history + [
-        {"role": "user", "content": req.message},
+        {"role": "user", "content": guard.cleaned_input},
         {"role": "assistant", "content": response_text},
     ]
     # Keep only the most recent N messages
